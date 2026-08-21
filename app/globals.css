@@ -1,26 +1,499 @@
 @import "tailwindcss";
 
+/* ============================================================
+   NEXT — Supply Chain Network
+   Design tokens derived from NEXT_SCN_Brand_Guidelines.docx v1.0 (2026)
+   ============================================================ */
+
+@theme {
+  /* --- Core palette (05 COLOR) --- */
+  --color-ink: #080808; /* Ink Black    — primary foundation */
+  --color-deep: #010080; /* Deep Blue    — dark accent, data/UI */
+  --color-teal: #3fe0d0; /* Signature Teal — bright accent, interactive */
+  --color-paper: #ffffff; /* White        — primary surface */
+
+  /* Tints derived from the four core values (UI states only) */
+  --color-ink-50: #141414;
+  --color-ink-100: #1c1c1c;
+  --color-ink-200: #262626;
+  --color-deep-400: #4b2fd6;
+  --color-teal-600: #16a99b;
+
+  /* --- Signature gradient (05 COLOR) ---
+     "a diagonal blend from warm coral-pink through magenta and violet
+      into deep blue — echoing the arrow icon inside the logo" */
+  --brand-coral: #ff7e5f;
+  --brand-magenta: #e5457e;
+  --brand-violet: #a537c8;
+  --brand-indigo: #4b2fd6;
+
+  /* --- Typography (06 TYPOGRAPHY) --- */
+  --font-sans: var(--font-brand);
+
+  /* --- Motion --- */
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Proxima Nova is the brand typeface across every touchpoint.
+     Drop licensed webfonts into /public/fonts and register them in the
+     @font-face block below — they will take precedence automatically.
+     Figtree is the closest free geometric stand-in; Helvetica Neue / Arial
+     are the documented system fallbacks. */
+  --font-brand: "Proxima Nova", var(--font-figtree), "Helvetica Neue", Arial,
+    sans-serif;
+
+  --gradient-signature: linear-gradient(
+    118deg,
+    var(--brand-coral) 0%,
+    var(--brand-magenta) 27%,
+    var(--brand-violet) 54%,
+    var(--brand-indigo) 78%,
+    var(--color-deep) 100%
+  );
+
+  /* Text cut of the signature gradient. Background-clip:text renders the full
+     ramp inside the glyph box, so the Deep Blue tail vanishes against Ink
+     Black. This keeps the coral→magenta→violet character and lifts the final
+     stop to a readable indigo. Backgrounds still use the full ramp. */
+  --gradient-signature-text: linear-gradient(
+    100deg,
+    var(--brand-coral) 0%,
+    var(--brand-magenta) 34%,
+    var(--brand-violet) 68%,
+    #7b5bff 100%
+  );
+
+  --gradient-signature-soft: linear-gradient(
+    118deg,
+    color-mix(in oklab, var(--brand-coral) 70%, transparent) 0%,
+    color-mix(in oklab, var(--brand-magenta) 70%, transparent) 27%,
+    color-mix(in oklab, var(--brand-violet) 70%, transparent) 54%,
+    color-mix(in oklab, var(--brand-indigo) 75%, transparent) 78%,
+    var(--color-deep) 100%
+  );
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*  Uncomment once licensed Proxima Nova webfonts are in /public/fonts.
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/fonts/ProximaNova-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
 }
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/fonts/ProximaNova-RegularIt.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/fonts/ProximaNova-Semibold.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/fonts/ProximaNova-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/fonts/ProximaNova-Black.woff2") format("woff2");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+*/
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: rgb(255 255 255 / 0.08);
+  }
+
+  html {
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-brand);
+    /* Body / 10.5pt Regular → 17px web equivalent */
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    font-weight: 400;
+    /* `clip`, not `hidden`: overflow-x:hidden makes body a scroll container,
+       which breaks `position: sticky` for descendants. `clip` suppresses the
+       horizontal overflow without creating one. */
+    overflow-x: clip;
+  }
+
+  /* Type hierarchy (06 TYPOGRAPHY): H1 40pt Bold, H2 26pt Bold,
+     H3 22pt Semibold — scaled fluidly for screen. */
+  h1 {
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+  }
+  h2 {
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  h3 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  /* Copy deterrents. The selection rules live in CSS so they apply before any
+     JavaScript runs; components/content-guard.tsx adds the event-level guards.
+
+     Form fields are exempted deliberately — a visitor has to be able to select
+     and correct text they typed themselves. */
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none; /* stops iOS long-press "Save Image" */
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
+
+  img,
+  video {
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none; /* blocks drag-to-desktop and the image context menu */
+  }
+
+  /* …but the logo is inside a link, and pointer-events:none on it would kill
+     the click target. Re-enable where an image is the interactive thing. */
+  a img,
+  button img {
+    pointer-events: auto;
+  }
+
+  ::selection {
+    background: var(--color-teal);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* The gradient stays a highlight, never wallpaper (08 SUMMARY). */
+  .bg-signature {
+    background-image: var(--gradient-signature);
+  }
+  .bg-signature-soft {
+    background-image: var(--gradient-signature-soft);
+  }
+  .text-signature {
+    background-image: var(--gradient-signature-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .border-signature {
+    border-color: transparent;
+    background-image: linear-gradient(var(--color-ink), var(--color-ink)),
+      var(--gradient-signature);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+  /* White text that resolves into the signature gradient on hover.
+     The gradient is always painted and clipped to the glyphs; the solid colour
+     sits on top and fades out, so this is a true crossfade rather than a colour
+     swap. Two details matter:
+       - fade to transparent-WHITE, not `transparent` (which is rgba(0,0,0,0)),
+         or the text dips through black on the way;
+       - the gradient spans the glyph box exactly (no oversized background with
+         a position sweep). Oversizing pushes the visible window onto the dark
+         indigo tail, which reads dimmer than the white it replaced. */
+  .hover-signature,
+  .hover-signature-dim {
+    background-image: var(--gradient-signature-text);
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: color 0.45s var(--ease-brand);
+  }
+  .hover-signature {
+    color: var(--color-paper);
+  }
+  .hover-signature-dim {
+    color: rgb(255 255 255 / 0.62);
+    transition: color 0.35s var(--ease-brand);
+  }
+  .hover-signature:hover,
+  .hover-signature-dim:hover,
+  .group\/sig:hover .hover-signature,
+  .group\/sig:hover .hover-signature-dim {
+    color: rgb(255 255 255 / 0);
+  }
+
+  /* ── iOS-style liquid glass ────────────────────────────────────────────
+     A translucent fill over a blurred, saturated backdrop, finished with a
+     bright specular edge along the top and a dim bounce along the bottom —
+     the two highlights are what make it read as a curved pane of glass rather
+     than a flat tinted box.
+
+     The sheen is a `background-image` rather than a ::before overlay on
+     purpose: an absolutely-positioned pseudo-element paints ABOVE non-
+     positioned inline content, so it would wash over button labels and icons.
+     A background layer always sits under content.
+
+     `saturate()` is what stops the blur looking grey — it pulls the colour of
+     whatever is behind the pane back up, which is how iOS glass picks up the
+     wallpaper underneath it. */
+  .glass {
+    background-color: rgb(255 255 255 / 0.07);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.15),
+      rgb(255 255 255 / 0.04) 44%,
+      rgb(255 255 255 / 0) 72%
+    );
+    -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.22),
+      inset 0 -1px 0 0 rgb(255 255 255 / 0.05),
+      0 8px 32px -10px rgb(0 0 0 / 0.6);
+    transition:
+      background-color 0.4s var(--ease-brand),
+      border-color 0.4s var(--ease-brand),
+      box-shadow 0.4s var(--ease-brand),
+      transform 0.4s var(--ease-brand);
+  }
+
+  /* Interactive glass: brightens and lifts on hover, settles on press. */
+  .glass-hover:hover {
+    background-color: rgb(255 255 255 / 0.13);
+    border-color: rgb(255 255 255 / 0.26);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.34),
+      inset 0 -1px 0 0 rgb(255 255 255 / 0.07),
+      0 12px 38px -10px rgb(0 0 0 / 0.7);
+    transform: translateY(-1px);
+  }
+  .glass-hover:active {
+    transform: translateY(0) scale(0.985);
+    background-color: rgb(255 255 255 / 0.17);
+  }
+
+  /* Brighter pane, for the one prominent action in a group. */
+  .glass-bright {
+    background-color: rgb(255 255 255 / 0.16);
+    border-color: rgb(255 255 255 / 0.3);
+  }
+  .glass-bright:hover {
+    background-color: rgb(255 255 255 / 0.24);
+    border-color: rgb(255 255 255 / 0.42);
+  }
+
+  /* The signature gradient wearing the same glass finish: the sheen and the
+     specular edges sit on top of the brand ramp, so the primary CTA belongs to
+     the same material family as everything else. */
+  .glass-signature {
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgb(255 255 255 / 0.24),
+        rgb(255 255 255 / 0.06) 46%,
+        rgb(255 255 255 / 0) 74%
+      ),
+      var(--gradient-signature);
+    background-size: cover;
+    border: 1px solid rgb(255 255 255 / 0.24);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.4),
+      inset 0 -1px 0 0 rgb(255 255 255 / 0.08),
+      0 10px 40px -12px rgb(165 55 200 / 0.75);
+    transition:
+      box-shadow 0.4s var(--ease-brand),
+      transform 0.4s var(--ease-brand);
+  }
+  .glass-signature:hover {
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.5),
+      inset 0 -1px 0 0 rgb(255 255 255 / 0.1),
+      0 16px 52px -10px rgb(165 55 200 / 0.9);
+    transform: translateY(-1px);
+  }
+  .glass-signature:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  /* Safari on iOS drops backdrop-filter inside some transformed ancestors;
+     without a backdrop the pane must not fall back to near-invisible. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass {
+      background-color: rgb(28 28 30 / 0.86);
+    }
+  }
+
+  /* Hazard-tape band: diagonal stripes struck over the signature gradient.
+     Two background layers in one declaration — the stripes must sit ON the
+     ramp, and a second element would need its own stacking context to blend. */
+  .caution-tape {
+    background-image: repeating-linear-gradient(
+        45deg,
+        rgb(8 8 8 / 0.34) 0 18px,
+        rgb(8 8 8 / 0) 18px 36px
+      ),
+      var(--gradient-signature);
+  }
+
+  /* Scope for a light band inside this otherwise dark site.
+     Two defaults have to flip inside it:
+       - the gradient-on-hover utilities rest at white, which is invisible on
+         white, so they rest at Ink Black instead and still fade to reveal the
+         ramp underneath;
+       - .text-signature uses the shortened ramp tuned for Ink Black, whose
+         lifted indigo tail is weak on a light ground. The full signature ramp
+         ends in Deep Blue and reads far better there. */
+  .on-light .hover-signature {
+    color: var(--color-ink);
+  }
+  .on-light .hover-signature-dim {
+    color: rgb(8 8 8 / 0.62);
+  }
+  .on-light .hover-signature:hover,
+  .on-light .hover-signature-dim:hover,
+  .on-light .group\/sig:hover .hover-signature,
+  .on-light .group\/sig:hover .hover-signature-dim {
+    color: rgb(8 8 8 / 0);
+  }
+  .on-light .text-signature {
+    background-image: var(--gradient-signature);
+  }
+
+  /* Glass over a light ground.
+     .glass is a WHITE translucent pane — over white it is invisible, and its
+     bright top edge disappears too. On a light band it inverts to a dark tint
+     with a light specular edge. The colour declaration also flips any text
+     inside it (the nav CTA, the burger icon) to Ink Black; it outranks the
+     single-class `text-paper` utility on those elements. */
+  .on-light .glass {
+    color: var(--color-ink);
+    background-color: rgb(8 8 8 / 0.05);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(8 8 8 / 0.07),
+      rgb(8 8 8 / 0) 70%
+    );
+    border-color: rgb(8 8 8 / 0.12);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.55),
+      0 8px 26px -14px rgb(0 0 0 / 0.35);
+  }
+  .on-light .glass-hover:hover {
+    background-color: rgb(8 8 8 / 0.09);
+    border-color: rgb(8 8 8 / 0.2);
+  }
+  .on-light .glass-bright {
+    background-color: rgb(8 8 8 / 0.1);
+    border-color: rgb(8 8 8 / 0.22);
+  }
+
+  /* Section label — Proxima Nova Semibold, letterspaced */
+  .eyebrow {
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+}
+
+/* Utilities */
+.grid-lines {
+  background-image: linear-gradient(
+      to right,
+      rgb(255 255 255 / 0.028) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.028) 1px, transparent 1px);
+  background-size: 68px 68px;
+}
+
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/*
+ * Translate only — no scale. The element this drives is a large soft bloom;
+ * scaling it forces a full re-rasterisation on every frame, which is ruinous
+ * when the element is also blurred. A pure translate stays on the compositor.
+ *
+ * The -50% is baked in because keyframe `transform` REPLACES the element's
+ * `-translate-x-1/2` centring rather than composing with it — without it the
+ * bloom jumps off-centre the moment the animation starts.
+ */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  50% {
+    transform: translate3d(calc(-50% + 2%), -3%, 0);
+  }
+}
+.animate-drift {
+  animation: drift 18s var(--ease-brand) infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbar hidden: reading progress is shown by the gradient bar across the
+   top instead (components/scroll-progress.tsx). Scrolling itself is untouched —
+   only the visual bar is suppressed, so wheel, trackpad, keys and touch all
+   still work. */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
