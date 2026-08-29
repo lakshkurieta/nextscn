@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   // any staging copy do not compete with the real page.
   alternates: { canonical: "/" },
   title: {
-    default: "NEXT SCN — Supply Chain Network & Community",
+    default: "NEXT SCN, Supply Chain Network & Community",
     template: "%s · NEXT SCN",
   },
   /**
@@ -46,13 +46,13 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE,
     siteName: "NEXT SCN",
-    title: "NEXT SCN — Supply Chain Network & Community",
+    title: "NEXT SCN, Supply Chain Network & Community",
     description:
       "A global supply chain network bringing together the people, businesses, ideas and technology shaping what comes next.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "NEXT SCN — Supply Chain Network & Community",
+    title: "NEXT SCN, Supply Chain Network & Community",
     description:
       "A global supply chain network bringing together the people, businesses, ideas and technology shaping what comes next.",
   },

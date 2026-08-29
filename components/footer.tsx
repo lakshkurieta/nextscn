@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { SectionLink } from "@/components/ui/section-link";
 
 /**
  * 07 IN USE — the reversed lockup on the signature gradient.
@@ -18,6 +19,7 @@ const LINKS = [
   { label: "What's NEXT", href: "#about" },
   { label: "When NEXT", href: "#network" },
   { label: "Connect", href: "#contact" },
+  { label: "Become a Member", href: "/become-a-member" },
   { label: "Privacy", href: "#" },
   { label: "Terms", href: "#" },
 ];
@@ -67,17 +69,17 @@ export function Footer() {
           <div className="flex flex-col gap-6 lg:items-end">
             <nav className="flex flex-wrap gap-x-7 gap-y-2.5 lg:justify-end">
               {LINKS.map((l) => (
-                <a
+                <SectionLink
                   key={l.label}
                   href={l.href}
                   className="text-[0.875rem] text-paper/75 transition-colors duration-300 hover:text-paper"
                 >
                   {l.label}
-                </a>
+                </SectionLink>
               ))}
             </nav>
 
-            <a
+            <SectionLink
               href="#contact"
               className="group inline-flex items-center gap-2 self-start text-[0.9375rem] font-semibold text-paper lg:self-end"
             >
@@ -85,7 +87,7 @@ export function Footer() {
               <span className="glass glass-hover flex h-7 w-7 items-center justify-center rounded-full">
                 <ArrowUpRight size={14} />
               </span>
-            </a>
+            </SectionLink>
           </div>
         </div>
 

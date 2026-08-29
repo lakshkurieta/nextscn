@@ -1,0 +1,40 @@
+/*
+ * ThreeUI background styling, lifted verbatim from the registered `threeui.css`
+ * (sha256 efe4447139f1358dd8e9be68edf6fa46cbefbd1de423a4d6c439ca61d2c8eccf,
+ * kept alongside this file at ./threeui.css for provenance).
+ *
+ * The registered stylesheet is ThreeUI's whole site sheet: 1775 lines covering
+ * every component in the library plus their docs-page chrome, and an @font-face
+ * whose `./fonts/fragment-mono.woff2` is not part of the bundle, so importing it
+ * fails the build outright ("Module not found"). Beyond that it would drag rules
+ * for article headings and unrelated components into the NEXT SCN site.
+ *
+ * So only the rules that actually match this component's markup are imported —
+ * the two `.threeui-background` blocks and the canvas rule, in source order,
+ * declaration for declaration as authored. Modifier rules for variants that are
+ * not installed here (.condensation, .predictive-arc--light, .data-pixel-arc--light)
+ * are omitted; `.emerald-horizon` carries no rules of its own in the source.
+ */
+
+.threeui-background {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.threeui-background {
+  position: relative;
+  isolation: isolate;
+  background: #030304;
+}
+
+.threeui-background > canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}

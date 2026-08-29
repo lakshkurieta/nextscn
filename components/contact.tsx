@@ -135,8 +135,7 @@ export function Contact() {
   }, []);
 
   return (
-    <section id="contact" className="relative scroll-mt-20 overflow-hidden py-28 sm:py-36">
-      <div aria-hidden className="bg-signature absolute inset-x-0 top-0 h-px opacity-45" />
+    <section id="contact" className="relative scroll-mt-20 overflow-hidden pt-8 pb-28 sm:pt-10 sm:pb-36">
       <div
         aria-hidden
         className="pointer-events-none absolute -right-1/4 bottom-0 -z-10 h-[52vw] w-[70vw]"
@@ -158,7 +157,7 @@ export function Contact() {
           {/* ---------- Title ---------- */}
           <div className="lg:col-start-1 lg:row-start-1">
             <Reveal>
-              <p className="eyebrow text-teal">03 Meet your NEXT</p>
+              <p className="eyebrow text-teal">Learn more</p>
             </Reveal>
             <Reveal delay={0.06}>
               <h2 className="mt-5 text-[clamp(2.1rem,4.6vw,3.4rem)]">
@@ -213,9 +212,9 @@ export function Contact() {
           <div className="lg:col-start-1 lg:row-start-2">
             <Reveal delay={0.12}>
               <p className="mt-6 max-w-md text-paper/55">
-                To become a part of the next community? We are glad that you
-                thought so. Fill out this quick form below and someone from our
-                team will get in touch with you shortly.
+                Want to know more what NEXT is about, still have questions? Fill
+                out this quick form below and someone from our team will get in
+                touch with you shortly to explain to you further.
               </p>
             </Reveal>
 
@@ -321,7 +320,7 @@ export function Contact() {
                       ? "Request received"
                       : formState.submitting
                         ? "Sending…"
-                        : "Get ready for the change"}
+                        : "Claim my seat"}
                     {sent ? (
                       <Check size={17} />
                     ) : (

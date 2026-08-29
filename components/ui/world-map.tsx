@@ -14,8 +14,9 @@ import DottedMap from "dotted-map";
  *      black so the hero's signature gradient reads through it;
  *   2. the generated dot-grid SVG is memoised — DottedMap re-runs the whole
  *      projection on every render otherwise;
- *   3. dots and arcs are brand-coloured, and the arc gradient fades through
- *      Signature Teal instead of sky-500.
+ *   3. dots and arcs are brand-coloured: the lanes carry the signature gradient
+ *      instead of sky-500, and the endpoint markers stay Signature Teal so the
+ *      cities still read as points against the ramp running between them.
  */
 
 export type Lane = {
@@ -80,11 +81,27 @@ export default function WorldMap({
         className="pointer-events-none absolute inset-0 h-full w-full select-none"
       >
         <defs>
+          {/*
+            The lanes carry the signature gradient rather than a single hue.
+
+            These are the stops of --gradient-signature-text, not
+            --gradient-signature: the full ramp ends on Deep Blue (#010080),
+            which is all but invisible against the hero's Ink Black. The text
+            variant lifts that tail to #7b5bff, which is what keeps the far end
+            of every lane readable here.
+
+            The gradient maps to each path's own bounding box, so a lane gets
+            the whole ramp across its length, and the lit segment travelling
+            along it changes hue as it goes. The end stops stay transparent so
+            lanes fade in and out at their endpoints instead of stopping dead.
+          */}
           <linearGradient id="next-lane-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={lineColor} stopOpacity="0" />
-            <stop offset="12%" stopColor={lineColor} stopOpacity="1" />
-            <stop offset="88%" stopColor={lineColor} stopOpacity="1" />
-            <stop offset="100%" stopColor={lineColor} stopOpacity="0" />
+            <stop offset="0%" stopColor="#ff7e5f" stopOpacity="0" />
+            <stop offset="12%" stopColor="#ff7e5f" stopOpacity="1" />
+            <stop offset="40%" stopColor="#e5457e" stopOpacity="1" />
+            <stop offset="68%" stopColor="#a537c8" stopOpacity="1" />
+            <stop offset="88%" stopColor="#7b5bff" stopOpacity="1" />
+            <stop offset="100%" stopColor="#7b5bff" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -100,7 +117,7 @@ export default function WorldMap({
               <path
                 d={d}
                 fill="none"
-                stroke={lineColor}
+                stroke="url(#next-lane-gradient)"
                 strokeOpacity={0.16}
                 strokeWidth="1"
               />

@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSectionHref } from "@/components/ui/section-link";
 
 /**
  * The bar has no background of its own — no fill, no border, no blur. Only the
@@ -23,7 +25,12 @@ const links = [
   { label: "Connect", href: "#contact" },
 ];
 
+/** A real route, so it goes through next/link rather than a hash anchor. */
+const MEMBER_HREF = "/become-a-member";
+
 export function Navbar() {
+  const sectionHref = useSectionHref();
+  const onHome = usePathname() === "/";
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const [overLight, setOverLight] = useState(false);
@@ -101,8 +108,12 @@ export function Navbar() {
     >
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         <a
-          href="#top"
-          aria-label="NEXT Supply Chain Network, back to top"
+          href={onHome ? "#top" : "/"}
+          aria-label={
+            onHome
+              ? "NEXT Supply Chain Network, back to top"
+              : "NEXT Supply Chain Network, back to home"
+          }
           className="shrink-0"
         >
           <Logo priority variant={overLight ? "primary" : "reversed"} />
@@ -115,7 +126,7 @@ export function Navbar() {
           {links.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              href={sectionHref(l.href)}
               className="group/sig rounded-full px-4 py-2 transition-colors duration-300 hover:bg-white/[0.12]"
             >
               <span className="hover-signature-dim text-[0.9375rem] font-semibold">
@@ -127,14 +138,14 @@ export function Navbar() {
 
         <div className="hidden md:block">
           <Button
-            href="#contact"
+            href={MEMBER_HREF}
             variant="glass"
             /* Tailwind utilities outrank the .on-light colour rule, so the
                override has to come through className where tailwind-merge can
                drop `text-paper`. */
             className={overLight ? "text-ink" : undefined}
           >
-            Meet your NEXT
+            Become a Member
           </Button>
         </div>
 
@@ -164,7 +175,7 @@ export function Navbar() {
               {links.map((l) => (
                 <a
                   key={l.href}
-                  href={l.href}
+                  href={sectionHref(l.href)}
                   onClick={() => setOpen(false)}
                   className="group/sig rounded-2xl px-5 py-4 transition-colors duration-300 hover:bg-white/[0.12]"
                 >
@@ -174,13 +185,13 @@ export function Navbar() {
                 </a>
               ))}
               <Button
-                href="#contact"
+                href={MEMBER_HREF}
                 variant="signature"
                 size="lg"
                 className="mt-3"
                 onClick={() => setOpen(false)}
               >
-                Meet your NEXT
+                Become a Member
               </Button>
             </div>
           </motion.div>
