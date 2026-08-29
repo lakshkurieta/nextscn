@@ -14,11 +14,11 @@ import { mapLanes } from "@/data/arcs";
  * One variant per placement; here the homepage cycles the full set.
  */
 const NOUNS = [
-  "partner",
   "client",
   "lead",
+  "partner",
   "investor",
-  "opportunity",
+  "hire",
   "breakthrough",
 ] as const;
 
@@ -164,7 +164,7 @@ export function Hero() {
           className="glass mb-8 inline-flex items-center gap-2.5 rounded-full py-1.5 pr-4 pl-1.5"
         >
           <span className="px-2.5 text-[0.8125rem] font-medium text-paper/70">
-            The supply chain community you&apos;ve been dreaming of
+            The supply chain network that refuses to pick a side.
           </span>
         </motion.div>
 
@@ -215,10 +215,12 @@ export function Hero() {
         >
           One industry. No walls. One introduction away.
           <span className="mt-3 block text-base text-paper/45">
-            NEXT brings together the operators, founders, investors, partners,
-            and any possible part of supply chain industry who are shaping the
-            modern supply chain network, so opportunity moves at the speed of
-            relationships, not gatekeepers.
+            Supply chain moves the world&apos;s goods, capital and data, and
+            still can&apos;t get a 3PL, a software founder, a brand or an
+            investor into the same room. NEXT is that room for you. We bring
+            together the operators, technology, brands, manufacturers and
+            capital who are shaping the modern supply chain network, so
+            opportunity moves at the speed of relationships, not gatekeepers.
           </span>
         </motion.p>
 
@@ -228,8 +230,6 @@ export function Hero() {
           transition={{ duration: 0.7, ease, delay: 0.32 }}
           className="mt-11 flex flex-col gap-3 sm:flex-row sm:items-center"
         >
-          {/* Learn more scrolls to the next section rather than jumping to
-              the form, per the brief. */}
           <Button href="#about" size="lg" variant="signature">
             Learn more
             <ArrowRight
@@ -237,9 +237,34 @@ export function Hero() {
               className="transition-transform duration-300 group-hover:translate-x-1"
             />
           </Button>
+          <Button href="/become-a-member" size="lg" variant="glass">
+            Become a Member
+          </Button>
         </motion.div>
 
       </div>
+      {/*
+        Founding-membership scarcity, pinned to the hero rather than the
+        viewport: it belongs to this section and should scroll away with it, not
+        follow the reader down the page like an ad.
+      */}
+      <motion.a
+        href="/become-a-member"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease, delay: 0.9 }}
+        className="glass glass-hover absolute right-5 bottom-24 z-10 hidden max-w-[15rem] rounded-2xl px-5 py-4 sm:right-8 sm:bottom-28 sm:block"
+      >
+        <p className="text-[0.6875rem] font-black tracking-[0.18em] text-teal uppercase">
+          Hurry!
+        </p>
+        <p className="mt-1.5 text-[0.875rem] leading-snug font-semibold text-paper">
+          Founding membership is capped at 50.
+        </p>
+        <p className="mt-1 text-[0.875rem] leading-snug text-paper/60">
+          Only 20 seats remaining.
+        </p>
+      </motion.a>
     </section>
   );
 }

@@ -88,8 +88,15 @@ export const mapLanes = [
   { start: point("singapore"), end: point("rotterdam") },
   { start: point("rotterdam"), end: point("newYork") },
   { start: point("saoPaulo"), end: point("lagos") },
-  { start: point("dubai"), end: point("mumbai") },
+  // Dubai to Mumbai rendered as a 66px stub, barely longer than the two dots
+  // at its ends. Run it up to Tokyo instead: same corner of the map, but a
+  // lane with enough length for the travelling pulse to read as travelling.
+  { start: point("dubai"), end: point("tokyo") },
   { start: point("losAngeles"), end: point("mexicoCity") },
   { start: point("busan"), end: point("sydney") },
   { start: point("london"), end: point("johannesburg") },
+  // Two lanes anchored in the north-east of the map, which was the emptiest
+  // quadrant: Tokyo sat in the data but was not on any hero lane at all.
+  { start: point("tokyo"), end: point("losAngeles") },
+  { start: point("busan"), end: point("rotterdam") },
 ];

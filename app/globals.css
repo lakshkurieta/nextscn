@@ -474,6 +474,48 @@
   animation: marquee 32s linear infinite;
 }
 
+/* Section 04's lattice. The pan distance is exactly one .grid-lines cell (68px),
+   so the pattern lands back on itself and the loop is seamless. The element is
+   oversized by a cell in every direction, so the travelling edge is always
+   outside the visible box. */
+@keyframes grid-pan {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-68px, -68px, 0);
+  }
+}
+.animate-grid-pan {
+  animation: grid-pan 14s linear infinite;
+}
+
+/* A slow beam crossing that lattice, so the grid reads as alive rather than
+   printed. Kept faint: it is behind body copy. */
+/* The skew is baked into the keyframes rather than applied with a `skew-x`
+   utility: that utility composes into `transform`, which these keyframes also
+   set, so the animation would simply replace it and the beam would cross the
+   grid square instead of raked. */
+@keyframes grid-sweep {
+  0% {
+    transform: translate3d(-45%, 0, 0) skewX(-12deg);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(150%, 0, 0) skewX(-12deg);
+    opacity: 0;
+  }
+}
+.animate-grid-sweep {
+  animation: grid-sweep 11s var(--ease-brand) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
